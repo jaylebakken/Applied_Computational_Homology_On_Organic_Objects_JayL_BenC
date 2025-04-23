@@ -1,5 +1,7 @@
 
+import os
 from PIL import Image
+import gudhi.bottleneck
 import matplotlib.pyplot as plt
 import numpy as np
 import gudhi
@@ -58,19 +60,51 @@ def showPD(persistance_matrix,species):
         yy = PD[i][:,1]    
         plt.scatter(xx,yy, s=5, color=colors[i],label=("dimension " + str(i) + " features"))
     plt.title("Persistance Diagram for " + species)
-    plt.xlabel("x")
-    plt.ylabel("y")
+    plt.xlabel("Feature Birth")
+    plt.ylabel("Feature Death")
     plt.legend()
     plt.show()
 
-    ##TODO: complete bottleneck distance method
+def findMatch(image_path):
+    #param: image path
+    #returns: closest species match
+    query_img = filter("Dataset/POLLEN73S/tapirira_guianensis/tapirira_guianensis_2.jpg")
+    query_points = getCloud(query_img)
+    query_PD = computePD(query_points)
+    path = "Dataset/POLLEN73S/"
+    dataset = os.listdir(path)
+    closesetmatch = ""
+    min = 10000000000000000
+    average = 0
+    bottleneck=0
+    for folder in dataset:
+        bottleneck=0
+        average=0
+        current_species = os.listdir("Dataset/POLLEN73S/"+folder+"/")
+        print(closesetmatch)
+        for file in current_species:
+           average += 1
+           target_image= filter(path+folder+"/"+file)
+           target_points = getCloud(target_image)
+           target_PD = computePD(target_points)
+           bottleneck += gudhi.bottleneck_distance(query_PD[0][1],target_PD[0][1])
+        print(bottleneck/average)
+        if bottleneck/average<min:
+            min=bottleneck/average
+            closesetmatch = folder
 
+    return closesetmatch
+           
+               
+            
+            
 def main():
+    #print(findMatch("Dataset/POLLEN73S/tapirira_guianensis/tapirira_guianensis_2.jpg"))
+    print("all done")
     img = filter("Dataset/POLLEN73S/tapirira_guianensis/tapirira_guianensis_2.jpg")
     points = getCloud(img)
     showPoints(points)
     diag = computePD(img)
-    showPD(diag, "acrocomia aculeta 1")
     
 
 
