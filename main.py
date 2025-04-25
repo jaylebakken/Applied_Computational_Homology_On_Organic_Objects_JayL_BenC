@@ -80,18 +80,20 @@ def findMatch(image_path):
     min = 10000000000000000
     for folder in dataset:
         bottleneck=0
-        average=0
+        average = 0
         current_species = os.listdir(path+folder+"/")
         for sample in current_species:
-           average +=1
-           for matrix in sample:
-               print(path+folder+"/"+sample+"/")
-        break
-            
-        #print(bottleneck)
-        #if bottleneck<min:
-        #    min=bottleneck
-        #    closesetmatch = folder
+           dimension = 0
+           for matrix in os.listdir(path+folder+"/"+sample):
+               print(path+folder+"/"+sample+"/"+matrix)
+               targetPD= np.load(path+folder+"/"+sample+"/"+matrix)
+               bottleneck+= gudhi.hera.bottleneck_distance(targetPD,query_PD[0][dimension])
+               dimension +=1
+               average+=1
+        print(bottleneck/average)
+        if bottleneck/average<min:
+            min=bottleneck/average
+            closesetmatch = folder
 
     return closesetmatch
            
@@ -99,22 +101,8 @@ def findMatch(image_path):
             
             
 def main():
-    print(findMatch("Dataset/POLLEN73S/tapirira_guianensis/tapirira_guianensis_2.jpg"))
-    #print("all done")
-    #img = filter("Dataset/POLLEN73S/tapirira_guianensis/tapirira_guianensis_2.jpg")
-    #points = getCloud(img)
-    #showPoints(points)
-    #diag = computePD(img)
-    #showPD(diag, "aa")
-
-    #img2 = filter("Dataset/POLLEN73S/tapirira_guianensis/tapirira_guianensis_4.jpg")
-    #points2 = getCloud(img2)
-    #showPoints(points2)
-    #diag2 = computePD(img2)
-    #print(np.array(diag[0][1]).shape)
-    #print(np.array(diag2[0][1]).shape)
-    #dist = gudhi.hera.bottleneck_distance(np.array(diag[0][1]),np.array(diag2[0][1]),0.1)
-    #print("hi" + str(dist))
+    print(findMatch("Dataset/POLLEN73S/anadenanthera_colubrina/anadenanthera_colubrina (3).jpg"))
+    
 
 
 if __name__=="__main__":
