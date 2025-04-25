@@ -2,6 +2,7 @@
 import os
 from PIL import Image
 import gudhi.bottleneck
+import gudhi.hera
 import matplotlib.pyplot as plt
 import numpy as np
 import gudhi
@@ -68,30 +69,29 @@ def showPD(persistance_matrix,species):
 def findMatch(image_path):
     #param: image path
     #returns: closest species match
-    query_img = filter("Dataset/POLLEN73S/tapirira_guianensis/tapirira_guianensis_2.jpg")
-    query_points = getCloud(query_img)
-    query_PD = computePD(query_points)
-    path = "Dataset/POLLEN73S/"
+    query_img = filter(image_path)
+    #query_points = getCloud(query_img)
+    #showPoints(query_points)
+    query_PD = computePD(query_img)
+
+    path = "Preprocessed_Data/"
     dataset = os.listdir(path)
     closesetmatch = ""
     min = 10000000000000000
-    average = 0
-    bottleneck=0
     for folder in dataset:
         bottleneck=0
         average=0
-        current_species = os.listdir("Dataset/POLLEN73S/"+folder+"/")
-        print(closesetmatch)
-        for file in current_species:
-           average += 1
-           target_image= filter(path+folder+"/"+file)
-           target_points = getCloud(target_image)
-           target_PD = computePD(target_points)
-           bottleneck += gudhi.bottleneck_distance(query_PD[0][1],target_PD[0][1])
-        print(bottleneck/average)
-        if bottleneck/average<min:
-            min=bottleneck/average
-            closesetmatch = folder
+        current_species = os.listdir(path+folder+"/")
+        for sample in current_species:
+           average +=1
+           for matrix in sample:
+               print(path+folder+"/"+sample+"/")
+        break
+            
+        #print(bottleneck)
+        #if bottleneck<min:
+        #    min=bottleneck
+        #    closesetmatch = folder
 
     return closesetmatch
            
@@ -99,13 +99,22 @@ def findMatch(image_path):
             
             
 def main():
-    #print(findMatch("Dataset/POLLEN73S/tapirira_guianensis/tapirira_guianensis_2.jpg"))
-    print("all done")
-    img = filter("Dataset/POLLEN73S/tapirira_guianensis/tapirira_guianensis_2.jpg")
-    points = getCloud(img)
-    showPoints(points)
-    diag = computePD(img)
-    
+    print(findMatch("Dataset/POLLEN73S/tapirira_guianensis/tapirira_guianensis_2.jpg"))
+    #print("all done")
+    #img = filter("Dataset/POLLEN73S/tapirira_guianensis/tapirira_guianensis_2.jpg")
+    #points = getCloud(img)
+    #showPoints(points)
+    #diag = computePD(img)
+    #showPD(diag, "aa")
+
+    #img2 = filter("Dataset/POLLEN73S/tapirira_guianensis/tapirira_guianensis_4.jpg")
+    #points2 = getCloud(img2)
+    #showPoints(points2)
+    #diag2 = computePD(img2)
+    #print(np.array(diag[0][1]).shape)
+    #print(np.array(diag2[0][1]).shape)
+    #dist = gudhi.hera.bottleneck_distance(np.array(diag[0][1]),np.array(diag2[0][1]),0.1)
+    #print("hi" + str(dist))
 
 
 if __name__=="__main__":
