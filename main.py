@@ -101,7 +101,7 @@ def findMatch(image_path):
             
             
 def main():
-    print(findMatch("Dataset/POLLEN73S/anadenanthera_colubrina/anadenanthera_colubrina (3).jpg"))
+    print(findMatch("Dataset/POLLEN73S/acrocomia_aculeta/Figura1.TIF"))
     
 
 
