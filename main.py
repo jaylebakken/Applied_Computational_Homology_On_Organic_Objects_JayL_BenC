@@ -8,6 +8,7 @@ import numpy as np
 import gudhi
 from gudhi.sklearn.rips_persistence import RipsPersistence as rp
 
+
 def getCloud(image_ndArray):
     ##parameters, 2d Nd Array representing an image
     ##returns an array [x,y] representing a point cloud
@@ -70,8 +71,8 @@ def findMatch(image_path):
     #param: image path
     #returns: closest species match
     query_img = filter(image_path)
-    #query_points = getCloud(query_img)
-    #showPoints(query_points)
+    query_points = getCloud(query_img)
+    showPoints(query_points)
     query_PD = computePD(query_img)
 
     path = "Preprocessed_Data/"
@@ -101,7 +102,11 @@ def findMatch(image_path):
             
             
 def main():
-    print(findMatch("Dataset/POLLEN73S/acrocomia_aculeta/Figura1.TIF"))
+    image_path = "Dataset/POLLEN73S/acrocomia_aculeta/Figura1.TIF"
+    query_img = filter(image_path)
+    query_points = getCloud(query_img)
+    showPoints(query_points)
+    query_PD = computePD(query_img)
     
 
 
